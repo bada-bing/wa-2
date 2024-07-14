@@ -11,6 +11,7 @@ import (
 	"wa-2/clockify"
 	"wa-2/logseq"
 	"wa-2/orb"
+	"wa-2/sketchybar"
 	"wa-2/util"
 	"wa-2/vpn"
 )
@@ -92,7 +93,7 @@ func main() {
 	fmt.Println("📟 Start work session")
 
 	var wg sync.WaitGroup
-	wg.Add(5)
+	wg.Add(6)
 
 	go orb.StartOrbStack(&wg)
 
@@ -100,6 +101,7 @@ func main() {
 	go vpn.StartOpenVPNConnection(&wg) // tunnelblick
 	go arc.SetupSpace(&wg)
 	go clockify.StartTimer(&wg)
+	go sketchybar.LoadWorkConfiguration(&wg)
 	go logseq.OpenActivePage(issueKey)
 
 	wg.Wait()
