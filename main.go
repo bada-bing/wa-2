@@ -2,6 +2,7 @@ package main
 
 import (
 	"sync"
+	"wa-2/arc"
 	"wa-2/orb"
 	"wa-2/vpn"
 )
@@ -51,9 +52,11 @@ import (
 
 func main() {
 	var wg sync.WaitGroup
-	wg.Add(2)
+	wg.Add(3)
 
-	orb.StartOrbStack(&wg)
-	vpn.StartOpenVPNConnection(&wg)
+	go orb.StartOrbStack(&wg)
+	go vpn.StartOpenVPNConnection(&wg)
+	go arc.SetupSpace(&wg)
+
 	wg.Wait()
 }
