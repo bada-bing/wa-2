@@ -1,0 +1,16 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "wa-2-config",
+    "properties": {
+        "modules": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "enum": [
+                    "orb"
+                ]
+            },
+            "uniqueItems": true
+        }
+    }
+}

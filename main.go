@@ -1,7 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
+	"os"
+	"path/filepath"
 	"sync"
 	"wa-2/arc"
 	"wa-2/clockify"
@@ -49,10 +53,54 @@ import (
 // - - you could create a protocol to have it closed, and open it a couple of times a day or when you receive a phone application
 // - - run raycast script which opens unreads directly so you can process them
 
-// Notes
-// useful hints: sudo visudo to add command to list of sudoers (e.g., kubectl)
+type Workflow_Config struct {
+	Modules []string `json:"modules"`
+}
+
+func findConfigFile() string {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return ""
+	}
+
+	fmt.Println("Home directory:", homeDir)
+
+	// Define the relative path
+	relativePath := "src/go/src/wa-2/data/cart-ui-next.wa-2.json"
+
+	// Create the full path
+	fullPath := filepath.Join(homeDir, relativePath)
+	return fullPath
+}
+
+func readConfig(configFile string) Workflow_Config {
+	// Read the JSON file
+	data, err := os.ReadFile(configFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Unmarshal the JSON into the struct
+	var config Workflow_Config
+	err = json.Unmarshal(data, &config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// TODO validate using json schema
+
+	return config
+}
 
 func main() {
+
+	fullPath := findConfigFile()
+	config := readConfig(fullPath)
+
+	// Print the modules
+	fmt.Println("Modules:", config.Modules)
+
 	fmt.Println("📟 Start work session")
 
 	var wg sync.WaitGroup
