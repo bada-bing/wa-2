@@ -3,6 +3,7 @@ package main
 import (
 	"sync"
 	"wa-2/orb"
+	"wa-2/vpn"
 )
 
 // this small program will be run inside of tmux session
@@ -19,7 +20,7 @@ import (
 // 1. Identify the project (work or study), to figure out what tools and how to run them
 // 2. Start necessary tools
 // - 2.1 Start OrbStack ✅
-// - 2.2 Start OpenVPN
+// - 2.2 Start OpenVPN ✅
 // - 2.3 Arc Browser Management
 // - - - clear the space
 // - - - open only relevant browsers
@@ -30,8 +31,9 @@ import (
 
 func main() {
 	var wg sync.WaitGroup
-	wg.Add(1)
+	wg.Add(2)
 
 	orb.StartOrbStack(&wg)
+	vpn.StartOpenVPNConnection(&wg)
 	wg.Wait()
 }
