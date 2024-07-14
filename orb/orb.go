@@ -19,8 +19,8 @@ func StartOrbStack(wg *sync.WaitGroup) {
 		if err != nil {
 			log.Fatalf("Failed to start OrbStack: %v", err)
 		}
-		fmt.Println("Start OrbStack")
+		fmt.Println("✔️ [orbstack] started orbstack")
 	} else {
-		fmt.Println("Orbstack is already running")
+		fmt.Println("✔️ [orbstack] orbstack is already running")
 	}
 }

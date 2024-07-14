@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sync"
 	"wa-2/arc"
 	"wa-2/clockify"
@@ -52,6 +53,8 @@ import (
 // useful hints: sudo visudo to add command to list of sudoers (e.g., kubectl)
 
 func main() {
+	fmt.Println("📟 Start work session")
+
 	var wg sync.WaitGroup
 	wg.Add(4)
 

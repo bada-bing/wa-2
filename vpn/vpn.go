@@ -30,7 +30,7 @@ func StartOpenVPNConnection(wg *sync.WaitGroup) {
 	if err != nil {
 		log.Fatalf("Failed to start OpenVPN: %v", err)
 	} else {
-		fmt.Println("OpenVPN Connection is started")
+		fmt.Println("✔️ [tunnelblick] openVPN connection is on")
 	}
 }
 
@@ -46,6 +46,6 @@ func CloseOpenVPNConnection(wg *sync.WaitGroup) {
 	if err != nil {
 		log.Fatalf("Failed to close OpenVPN: %v", err)
 	} else {
-		fmt.Println("OpenVPN Connection is disconnected")
+		fmt.Println("✔️ [tunnelblick] openVPN connection is off")
 	}
 }

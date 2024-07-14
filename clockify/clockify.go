@@ -76,6 +76,7 @@ func getCurrentJiraIssue() Issue {
 			return issue
 		}
 	}
+
 	return Issue{
 		Id:   currentIssueKey,
 		Name: "doesnt_exist",
@@ -98,7 +99,7 @@ func StartTimer(wg *sync.WaitGroup) {
 	issue := getCurrentJiraIssue()
 
 	if issue.Name == "doesnt_exist" {
-		fmt.Printf("❌ [clockify] %s issue does not exist. Did you bootstap it properly?\n", issue.Id)
+		fmt.Printf("❌ [clockify] %s issue does not exist. Did you bootstap it properly?\n", issue.Name)
 		return
 
 		// TODO you don't need to exit here, just don't use task id in the request body down below
@@ -151,5 +152,6 @@ func StartTimer(wg *sync.WaitGroup) {
 
 	statusCode := resp.StatusCode
 
-	fmt.Printf("Add time entry: Issue: %s; Status: %d\n", issue.Name, statusCode)
+	fmt.Printf("✔️ [clockify] Add time entry: Issue: %s; Status: %d\n", issue.Name, statusCode)
+	// TODO NOT all requests will be successful! you need to figure out based on the status code
 }

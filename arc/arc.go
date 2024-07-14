@@ -108,14 +108,13 @@ func SetupSpace(wg *sync.WaitGroup) {
 
 	clearTabs("localhost:3000")
 	clearTabs("https://dev.wescale.io/")
-	fmt.Println("Setup Arc Browser")
+	fmt.Println("✔️ [arc] open development web pages")
 
 	// Use work space
 	// arc space focus 2 - no need for this; it automatically selects the correct space because of air traffic control
 
-	// ✅ remove all open fragment-dev-server links
-	// identify all fragment-dev-server tabs ✅
-	// keep only one ✅
+	// keep browser space tidy (use only one localhost and one dev page)
+	// keep only one ✅ (identify all 'similar' tabs and only keep one or create a tab if none is open)
 	// - kill all extra tabs ✅
 	// - select and reload the remaining tab ✅
 	// - if no tabs to start with, open new localhost fragment-dev-server ✅
