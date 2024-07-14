@@ -3,6 +3,7 @@ package main
 import (
 	"sync"
 	"wa-2/arc"
+	"wa-2/clockify"
 	"wa-2/orb"
 	"wa-2/vpn"
 )
@@ -37,7 +38,7 @@ import (
 // - - - what you can do is something like open empty workspace, and then `code <file> --reuse-window`
 // - 2.5 Open the correct Logseq Page
 // - 2.6. Unit Tests, linting... ❓
-// 3. Start Clockify Session
+// 3. Start Clockify Session ✅
 // 4. Focus
 // - 4.1 cold turkey work_session block
 // - 4.2 dnd focus profile macos
@@ -52,11 +53,12 @@ import (
 
 func main() {
 	var wg sync.WaitGroup
-	wg.Add(3)
+	wg.Add(4)
 
 	go orb.StartOrbStack(&wg)
 	go vpn.StartOpenVPNConnection(&wg)
 	go arc.SetupSpace(&wg)
+	go clockify.StartTimer(&wg)
 
 	wg.Wait()
 }
