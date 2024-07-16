@@ -14,13 +14,12 @@ import (
 	"time"
 )
 
-const WORKSPACES_URL = "https://api.clockify.me/api/v1/workspaces"
 
+var WORKSPACES_URL = os.Getenv("WORKSPACES_URL")
 var MAIN_WORKSPACE_ID = os.Getenv("CLOCKIFY_MAIN_WORKSPACE_ID")
+var BASE_PATH = fmt.Sprintf("%s/%s", WORKSPACES_URL, MAIN_WORKSPACE_ID)
 
-var STORIES_ID = os.Getenv("STORIES_ID") // jira project
-
-type Issue struct {
+type ClockifyTask struct {
 	Name string `json:"name"`
 	Id   string `json:"id"`
 }
@@ -37,9 +36,9 @@ func GetIssueKey() string {
 	return strings.TrimSpace(string(output))
 }
 
-func getCurrentJiraIssue() Issue {
-
-	tasksUrl := fmt.Sprintf("%s/%s/projects/%s/tasks", WORKSPACES_URL, MAIN_WORKSPACE_ID, STORIES_ID)
+// e.g., current jira issues
+func getCurrentClockifyTask(projectId string) ClockifyTask {
+	tasksUrl := fmt.Sprintf("%s/projects/%s/tasks", BASE_PATH, projectId)
 
 	apiKey := os.Getenv("CLOCKIFY_API_KEY")
 
@@ -62,22 +61,22 @@ func getCurrentJiraIssue() Issue {
 		log.Fatal(err)
 	}
 
-	var clockifyIssues []Issue
-	err = json.Unmarshal(body, &clockifyIssues)
+	var clockifyTasks []ClockifyTask // tasks which belong to the same project
+	err = json.Unmarshal(body, &clockifyTasks)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	currentIssueKey := GetIssueKey()
 
-	for _, issue := range clockifyIssues {
+	for _, task := range clockifyTasks {
 		// fmt.Printf("name: %s, id: %s\n", task.Name, task.Id)
-		if issue.Name == currentIssueKey {
-			return issue
+		if task.Name == currentIssueKey {
+			return task
 		}
 	}
 
-	return Issue{
+	return ClockifyTask{
 		Id:   currentIssueKey,
 		Name: "doesnt_exist",
 	}
@@ -90,13 +89,16 @@ func getFormattedTime() string {
 	return formattedTime
 }
 
-func StartTimer(wg *sync.WaitGroup) {
+func StartTimer(wg *sync.WaitGroup, projectName string) {
 	defer wg.Done()
 
 	apiKey := os.Getenv("CLOCKIFY_API_KEY")
 
 	formattedTime := getFormattedTime()
-	issue := getCurrentJiraIssue()
+	projectId := os.Getenv(projectName)
+	// e.g., STORIES_ID - clockify project for work-related jira stories
+
+	issue := getCurrentClockifyTask(projectId)
 
 	if issue.Name == "doesnt_exist" {
 		fmt.Printf("❌ [clockify] %s issue does not exist. Did you bootstap it properly?\n", issue.Name)
@@ -107,7 +109,7 @@ func StartTimer(wg *sync.WaitGroup) {
 
 	description := "✨ Programming"
 
-	ADD_ENTRY_URL := fmt.Sprintf("https://api.clockify.me/api/v1/workspaces/%s/time-entries", MAIN_WORKSPACE_ID)
+	ADD_ENTRY_URL := fmt.Sprintf("%s/time-entries", BASE_PATH)
 
 	type RequestBody struct {
 		Billable    bool   `json:"billable"`
@@ -121,7 +123,7 @@ func StartTimer(wg *sync.WaitGroup) {
 	body := &RequestBody{
 		Billable:    true,
 		Description: description,
-		ProjectID:   STORIES_ID,
+		ProjectID:   projectId,
 		TaskID:      issue.Id,
 		Start:       formattedTime,
 		Type:        "REGULAR",

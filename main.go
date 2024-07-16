@@ -40,7 +40,10 @@ import (
 // todo read url from raindrop based on the session name
 
 type Workflow_Config struct {
-	Modules []string `json:"modules"`
+	Modules  []string `json:"modules"`
+	Clockify struct {
+		Project string `json:"project"`
+	} `json:"clockify"`
 }
 
 func findConfigFile() string {
@@ -49,8 +52,6 @@ func findConfigFile() string {
 		fmt.Println("Error:", err)
 		return ""
 	}
-
-	fmt.Println("Home directory:", homeDir)
 
 	// Define the relative path
 	relativePath := "src/go/src/wa-2/data/cart-ui-next.wa-2.json"
@@ -100,7 +101,7 @@ func main() {
 	// // TODO don't start VPN if connected to corporate wifi
 	go vpn.StartOpenVPNConnection(&wg) // tunnelblick
 	go arc.SetupSpace(&wg)
-	go clockify.StartTimer(&wg)
+	go clockify.StartTimer(&wg, config.Clockify.Project)
 	go sketchybar.LoadWorkConfiguration(&wg)
 	go logseq.OpenActivePage(issueKey)
 

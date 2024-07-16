@@ -1,5 +1,8 @@
 {
     "modules": [
         "orb"
-    ]
+    ],
+    "clockify": {
+        "project": "STORIES_ID"
+    }
 }

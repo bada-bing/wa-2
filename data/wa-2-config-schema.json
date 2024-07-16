@@ -11,6 +11,10 @@
                 ]
             },
             "uniqueItems": true
+        },
+        "clockify": {
+            "type": "object"
         }
-    }
+    },
+    "additionalProperties": false
 }
