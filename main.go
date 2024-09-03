@@ -85,8 +85,8 @@ func main() {
 	fullPath := findConfigFile()
 	config := readConfig(fullPath)
 
-	issueKey := util.GetIssueKey()
-	fmt.Printf("the issue %s \n", issueKey)
+	issueKey := util.GetIssueKey("")
+	fmt.Printf("Active Issue: %s \n", issueKey)
 
 	// Print the modules
 	fmt.Println("Modules:", config.Modules)
