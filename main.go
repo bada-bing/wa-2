@@ -9,6 +9,7 @@ import (
 	"sync"
 	"wa-2/arc"
 	"wa-2/clockify"
+	"wa-2/coldturkey"
 	"wa-2/logseq"
 	"wa-2/orb"
 	"wa-2/sketchybar"
@@ -94,7 +95,7 @@ func main() {
 	fmt.Println("📟 Start work session")
 
 	var wg sync.WaitGroup
-	wg.Add(6)
+	wg.Add(7)
 
 	go orb.StartOrbStack(&wg)
 
@@ -104,6 +105,8 @@ func main() {
 	go clockify.StartTimer(&wg, config.Clockify.Project)
 	go sketchybar.LoadWorkConfiguration(&wg)
 	go logseq.OpenActivePage(issueKey)
+
+	go coldturkey.StartWorkSession(&wg)
 
 	wg.Wait()
 }
