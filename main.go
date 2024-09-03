@@ -15,6 +15,7 @@ import (
 	"wa-2/sketchybar"
 	"wa-2/util"
 	"wa-2/vpn"
+	"wa-2/vscode"
 )
 
 // this program will run inside of tmux session
@@ -95,7 +96,7 @@ func main() {
 	fmt.Println("📟 Start work session")
 
 	var wg sync.WaitGroup
-	wg.Add(7)
+	wg.Add(8) // TODO make dynamic (based on number of modules)
 
 	go orb.StartOrbStack(&wg)
 
@@ -103,6 +104,7 @@ func main() {
 	go vpn.StartOpenVPNConnection(&wg) // tunnelblick
 	go arc.SetupSpace(&wg)
 	go clockify.StartTimer(&wg, config.Clockify.Project)
+	go vscode.OpenWorkspace(&wg, "")
 	go sketchybar.LoadWorkConfiguration(&wg)
 	go logseq.OpenActivePage(issueKey)
 
