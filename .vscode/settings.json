@@ -1,0 +1,10 @@
+{
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "**/*.wa-2.json"
+            ],
+            "url": "./data/wa-2-config-schema.json"
+        }
+    ]
+}
